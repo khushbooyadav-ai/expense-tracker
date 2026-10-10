@@ -7,6 +7,8 @@ A simple command-line tool to record and total my daily expenses, written in Pyt
 - View all expenses in a numbered list
 - Show the total amount spent
 - A menu that keeps running until you choose to quit
+- Expenses are saved to a file, so they are kept between runs
+- Friendly error message if the amount is not a number
 
 ## Built with
 - Python 3 (no external libraries)
@@ -22,13 +24,16 @@ python main.py
 
 ## Example
 ```
+Expense Tracker
 1. Add expense
 2. View expenses
 3. Show total
-4. Quit
-Choose: 2
-1. Tea: 20.00
-2. Book: 150.50
+4. Exit
+Enter your choice: 2
+Item: tea
+Amount: 20.0
+Item: coffee
+Amount: 4.0
 ```
 
 ## What I practised
@@ -37,6 +42,3 @@ Choose: 2
 - A `while` loop to build a menu
 - Formatted output with f-strings
 
-## Planned
-- Save expenses to a file so they are kept between runs
-- Friendly error messages for wrong input
