@@ -9,6 +9,7 @@ A simple command-line tool to record and total my daily expenses, written in Pyt
 - A menu that keeps running until you choose to quit
 - Expenses are saved to a file, so they are kept between runs
 - Friendly error message if the amount is not a number
+-Delete an expense by its number
 
 ## Built with
 - Python 3 (no external libraries)
