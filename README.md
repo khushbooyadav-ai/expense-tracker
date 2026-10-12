@@ -29,12 +29,14 @@ Expense Tracker
 1. Add expense
 2. View expenses
 3. Show total
-4. Exit
+4. Delete expense
+5. Exit
 Enter your choice: 2
 Item: tea
 Amount: 20.0
 Item: coffee
 Amount: 4.0
+
 ```
 
 ## What I practised
@@ -42,4 +44,6 @@ Amount: 4.0
 - Functions to keep the code organised
 - A `while` loop to build a menu
 - Formatted output with f-strings
-
+- Saving and loading data with JSON files
+- Handling errors with try / except
+- Git branches and pull requests
