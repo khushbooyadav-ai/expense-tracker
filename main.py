@@ -1,15 +1,24 @@
 import json
 FILE ="expenses.json"
+
+class Expense:
+    def __init__(self, item, amount):
+        self.item = item
+        self.amount = amount
+    def to_dict(self):
+        return{"item": self.item, "amount": self.amount}
+    
 def load_expenses():
     try:
         with open(FILE, "r") as f:
-            return json.load(f)
+            data = json.load(f)
+            return [Expense(**expense) for expense in data]
     except(FileNotFoundError, json.JSONDecodeError):
         return []
 
 def save_expenses(expenses):
     with open(FILE, 'w') as f:
-        json.dump(expenses,f, indent=2)
+        json.dump([expense.to_dict() for expense in expenses], f, indent=2)
 
 expenses = load_expenses()
 def add_expenses():
@@ -20,7 +29,7 @@ def add_expenses():
             break
         except ValueError:
             print("Please enter a valid number .")
-    expenses.append({"item": item, "amount": amount})
+    expenses.append(Expense(item, amount))
     save_expenses(expenses)
     print("Expense added successfully.")
 
@@ -29,24 +38,24 @@ def view_expenses():
         print("No expenses found.")
     else:
         for expense in expenses:
-            print(f"Item: {expense['item']}")
-            print(f"Amount: {expense['amount']}")
+            print(f"Item: {expense.item}")
+            print(f"Amount: {expense.amount}")
 
 def show_total():
-    total = sum(expense["amount"] for expense in expenses)
+    total = sum(expense.amount for expense in expenses)
     print(f"Total expenses: {total}")
 def delete_expense():
     if not expenses:
         print("no expense to delete.")
         return
     for number,expense in enumerate(expenses, start=1):
-        print(f"{number}.{expense['item']}: {expense['amount']}")
+        print(f"{number}.{expense.item}: {expense.amount}")
     try:
         choice = int(input("Enter the number of the expense to delete: "))
         if 1 <= choice <= len(expenses):
             deleted_expense = expenses.pop(choice - 1)
             save_expenses(expenses)
-            print(f"Expense deleted: {deleted_expense['item']}")
+            print(f"Expense deleted: {deleted_expense.item}")
         else:
             print("Invalid choice.")
     except ValueError:
