@@ -47,4 +47,4 @@ Amount: 4.0
 - Saving and loading data with JSON files
 - Handling errors with try / except
 - Git branches and pull requests
-- Classes and object (an `Expense` class)
+- Classes and object (an `Expense` class)5
