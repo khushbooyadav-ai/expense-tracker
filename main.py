@@ -12,7 +12,7 @@ def load_expenses():
     try:
         with open(FILE, "r") as f:
             data = json.load(f)
-            return [Expense(**expense) for expense in data]
+            return [Expense(expense["item"], expense["amount"]) for expense in data]
     except(FileNotFoundError, json.JSONDecodeError):
         return []
 
