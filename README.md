@@ -48,3 +48,11 @@ Amount: 4.0
 - Handling errors with try / except
 - Git branches and pull requests
 - Classes and object (an `Expense` class)5
+
+
+## Running tests
+Install pytest, then run:
+```
+pip install pytest
+python -m pytest
+```
