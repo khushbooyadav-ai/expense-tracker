@@ -49,10 +49,14 @@ Amount: 4.0
 - Git branches and pull requests
 - Classes and object (an `Expense` class)5
 
+## Setup
+```
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
 
 ## Running tests
-Install pytest, then run:
 ```
-pip install pytest
 python -m pytest
 ```
