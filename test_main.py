@@ -4,7 +4,7 @@ from main import Expense
 
 def test_to_dict():
     expense = Expense("tea", 20)
-    assert expense.to_dict() == {"item": "tea", "amount": 20}
+    assert expense.to_dict() == {"item": "tea", "amount": 999}
 
 
 def test_load_missing_file(tmp_path, monkeypatch):
