@@ -1,4 +1,6 @@
-# Expense Tracker
+# Expense 
+
+[![Tests](https://github.com/khushbooyadav-ai/expense-tracker/actions/workflows/tests.yml/badge.svg)](https://github.com/khushbooyadav-ai/expense-traker/action/workflows/tests.yml)
 
 A simple command-line tool to record and total my daily expenses, written in Python.
 
