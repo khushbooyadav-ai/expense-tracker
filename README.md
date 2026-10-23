@@ -62,3 +62,15 @@ pip install -r requirements.txt
 ```
 python -m pytest
 ```
+## Usage
+
+```
+python main.py add tea 20
+python main.py list
+python main.py total
+python main.py delete 1
+python main.py --help
+```
+
+Run `python main.py` with no arguments to use the interactive menu.
+```
