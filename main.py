@@ -3,13 +3,17 @@ import json
 FILE ="expenses.json"
 
 class Expense:
-    def __init__(self, item, amount):
+    """One spending record: what was bought and how much it cost."""
+
+    def __init__(self, item: str, amount: float) -> None:
         self.item = item
         self.amount = amount
-    def to_dict(self):
+    def to_dict(self) -> dict[str, str | float]:
+        """Return the expense as a dictionary that can be saved as JSON."""
         return{"item": self.item, "amount": self.amount}
     
-def load_expenses():
+def load_expenses() -> list[Expense]:
+    """Read expenses from FILE; return an empty list if it is missing or broken."""
     try:
         with open(FILE, "r") as f:
             data = json.load(f)
@@ -17,17 +21,21 @@ def load_expenses():
     except(FileNotFoundError, json.JSONDecodeError):
         return []
 
-def save_expenses(expenses):
+def save_expenses(expenses: list[Expense]) -> None:
+    """Write the given expenses to FILE as JSON."""
     with open(FILE, 'w') as f:
         json.dump([expense.to_dict() for expense in expenses], f, indent=2)
 
-expenses = load_expenses()
-def add_expense(item, amount):
+expenses: list[Expense] = load_expenses()
+
+def add_expense(item: str, amount: float) -> None:
+    """Add one expense to the list and save it."""
     expenses.append(Expense(item, amount))
     save_expenses(expenses)
     print("Expense added successfully.")
 
-def add_expenses():
+def add_expenses() -> None:
+    """Ask the user for an item and amount, then add the expense."""
     item = input("Enter an item name:")
     while True:
         try:
@@ -37,18 +45,21 @@ def add_expenses():
             print("Please enter a vaild number .")
     add_expense(item, amount)
 
-def view_expenses():
+def view_expenses() -> None:
+    """Print all expenses with numbers, or a message if there are none."""
     if not expenses:
         print("No expenses found.")
     else:
         for number, expense in enumerate(expenses, start=1):
             print(f"{number}. {expense.item}: {expense.amount}")
 
-def show_total():
+def show_total() -> None:
+    """Print the total of all expenses."""
     total = sum(expense.amount for expense in expenses)
     print(f"Total expenses: {total}")
 
-def delete_expense_by_number(choice):
+def delete_expense_by_number(choice: int) -> None:
+    """Delete the expense at position `choice` (starting from 1) and save."""
     if 1 <= choice <= len(expenses):
         deleted_expense = expenses.pop(choice-1)
         save_expenses(expenses)
@@ -56,7 +67,8 @@ def delete_expense_by_number(choice):
     else:
         print("Invalid choice.")
 
-def delete_expense():
+def delete_expense() -> None:
+    """Show the expenses, ask which one to delete, then delete it."""
     if not expenses:
         print("no expense to delete.")
         return
@@ -67,7 +79,8 @@ def delete_expense():
     except ValueError:
         print("Please enter a valid number.")
 
-def run_menu():
+def run_menu() -> None:
+    """Run the interactive menu until the user chooses Exit."""
     while True:
         print("\nExpense Tracker")
         print("1. Add expense")
@@ -90,7 +103,8 @@ def run_menu():
         else:
             print("Invalid choice. Please try again.")
 
-def build_parser():
+def build_parser() -> argparse.ArgumentParser:
+    """Create the command-line parser with add, list, total and delete commands."""
     parser = argparse.ArgumentParser(description="Simple expense tracker")
     subparsers = parser.add_subparsers(dest="command")
 
@@ -106,7 +120,8 @@ def build_parser():
 
     return parser
 
-def run_command(args):
+def run_command(args: argparse.Namespace) -> None:
+    """Run the command chosen on the command line."""
     if args.command == "add":
         add_expense(args.item, args.amount)
     elif args.command == "list":
@@ -117,7 +132,8 @@ def run_command(args):
         delete_expense_by_number(args.number)
 
 
-def main(argv=None):
+def main(argv: list[str] | None = None) -> None:
+    """Start the program: use the command line if given, otherwise the menu."""
     args = build_parser().parse_args(argv)
     if args.command is None:
         run_menu()
