@@ -1,6 +1,9 @@
 import argparse
 import json
+import logging
 FILE ="expenses.json"
+
+logger = logging.getLogger(__name__)
 
 class Expense:
     """One spending record: what was bought and how much it cost."""
@@ -18,19 +21,25 @@ def load_expenses() -> list[Expense]:
         with open(FILE, "r") as f:
             data = json.load(f)
             return [Expense(expense["item"], expense["amount"]) for expense in data]
-    except(FileNotFoundError, json.JSONDecodeError):
+    except FileNotFoundError:
+        logger .info("%s not found, starting with no expenses", FILE)
+        return []
+    except json.JSONDecodeError:
+        logger .warning("%s is not valid JSON, starting with no expenses", FILE)
         return []
 
 def save_expenses(expenses: list[Expense]) -> None:
     """Write the given expenses to FILE as JSON."""
     with open(FILE, 'w') as f:
         json.dump([expense.to_dict() for expense in expenses], f, indent=2)
+    logger .info("Saved %d expenses to %s", len(expenses), FILE)
 
 expenses: list[Expense] = load_expenses()
 
 def add_expense(item: str, amount: float) -> None:
     """Add one expense to the list and save it."""
     expenses.append(Expense(item, amount))
+    logger .info("Add expense: %s (%s)", item, amount)
     save_expenses(expenses)
     print("Expense added successfully.")
 
@@ -63,8 +72,10 @@ def delete_expense_by_number(choice: int) -> None:
     if 1 <= choice <= len(expenses):
         deleted_expense = expenses.pop(choice-1)
         save_expenses(expenses)
+        logger .info("Deleted expense: %s", deleted_expense.item)
         print(f"Expense deleted :{deleted_expense.item}")
     else:
+        logger .warning("Invalid delete number: %s (have %d expenses)", choice, len(expenses))
         print("Invalid choice.")
 
 def delete_expense() -> None:
@@ -131,9 +142,17 @@ def run_command(args: argparse.Namespace) -> None:
     elif args.command == "delete":
         delete_expense_by_number(args.number)
 
+def setup_logging() -> None:
+    """"Send log messages to expense_tracker.log."""
+    logging.basicConfig(
+        filename="expense_tracker.log",
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+    )
 
 def main(argv: list[str] | None = None) -> None:
     """Start the program: use the command line if given, otherwise the menu."""
+    setup_logging()
     args = build_parser().parse_args(argv)
     if args.command is None:
         run_menu()

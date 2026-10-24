@@ -59,3 +59,12 @@ def test_delete_by_number(tmp_path, monkeypatch):
     monkeypatch.setattr(main, "expenses", [Expense("tea",20), Expense("coffee", 30)])
     main.delete_expense_by_number(1)
     assert [e.item for e in main.expenses] == ["coffee"]
+
+
+def test_delete_invalid_number_logs_warning( tmp_path, monkeypatch, caplog):
+    monkeypatch.setattr(main, "FILE", str(tmp_path /"data.json"))
+    monkeypatch.setattr(main, "expenses", [Expense("tea", 20)])
+    with caplog.at_level("WARNING"):
+        main.delete_expense_by_number(5)
+    assert "Invalid delete number" in caplog.text
+    assert [e.item for e in main.expenses] ==["tea"]
