@@ -101,6 +101,7 @@ def delete_expense() -> None:
         print(f"{number}.{expense.item}: {expense.amount}")
     try:
         choice = int(input("Enter the number of the expense to delete: "))
+        delete_expense_by_number(choice)
     except ValueError:
         print("Please enter a valid number.")
 
