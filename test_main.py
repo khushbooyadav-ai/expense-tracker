@@ -1,4 +1,5 @@
 import pytest
+
 import main
 from main import Expense
 
@@ -69,6 +70,7 @@ def test_delete_invalid_number_logs_warning(tmp_path, monkeypatch, caplog):
         main.delete_expense_by_number(5)
     assert "Invalid delete number" in caplog.text
     assert [e.item for e in main.expenses] == ["tea"]
+
 
 def test_delete_expense_menu(tmp_path, monkeypatch):
     monkeypatch.setattr(main, "FILE", str(tmp_path / "data.json"))
