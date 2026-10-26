@@ -73,4 +73,14 @@ python main.py --help
 ```
 
 Run `python main.py` with no arguments to use the interactive menu.
+
+## Development setup
+
+Install the tools and switch on the pre-commit hook (once per clone):
+
 ```
+pip install -r requirements.txt
+pre-commit install
+```
+
+The hook runs ruff on every commit. If it fails, fix the problem (ruff format fixes files for you), run `git add` again, and commit again.
