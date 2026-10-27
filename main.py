@@ -1,9 +1,11 @@
 import argparse
 import json
 import logging
+from pathlib import Path
 
-FILE = "expenses.json"
-
+DATA_DIR = Path.home() / ".expense-tracker"
+FILE = str(DATA_DIR / "expenses.json")
+LOG_FILE = str(DATA_DIR / "expense_tracker.log")
 logger = logging.getLogger(__name__)
 
 
@@ -35,6 +37,7 @@ def load_expenses() -> list[Expense]:
 
 def save_expenses(expenses: list[Expense]) -> None:
     """Write the given expenses to FILE as JSON."""
+    Path(FILE).parent.mkdir(parents=True, exist_ok=True)
     with open(FILE, "w") as f:
         json.dump([expense.to_dict() for expense in expenses], f, indent=2)
     logger.info("Saved %d expenses to %s", len(expenses), FILE)
@@ -133,7 +136,9 @@ def run_menu() -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     """Create the command-line parser with add, list, total and delete commands."""
-    parser = argparse.ArgumentParser(description="Simple expense tracker")
+    parser = argparse.ArgumentParser(
+        prog="expenses", description="Simple expense tracker"
+    )
     subparsers = parser.add_subparsers(dest="command")
 
     add_parser = subparsers.add_parser("add", help="Add an expense")
@@ -166,9 +171,10 @@ def run_command(args: argparse.Namespace) -> None:
 
 
 def setup_logging() -> None:
-    """ "Send log messages to expense_tracker.log."""
+    """Send log messages to expense_tracker.log in the data folder."""
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
     logging.basicConfig(
-        filename="expense_tracker.log",
+        filename=LOG_FILE,
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
     )
