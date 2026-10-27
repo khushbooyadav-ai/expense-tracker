@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 
 import main
@@ -78,3 +80,20 @@ def test_delete_expense_menu(tmp_path, monkeypatch):
     monkeypatch.setattr("builtins.input", lambda _: "1")
     main.delete_expense()
     assert [e.item for e in main.expenses] == ["coffee"]
+
+
+def test_save_creates_missing_folder(tmp_path, monkeypatch):
+    monkeypatch.setattr(main, "FILE", str(tmp_path / "newfolder" / "data.json"))
+    main.save_expenses([Expense("tea", 20)])
+    assert (tmp_path / "newfolder" / "data.json").exists()
+
+
+def test_default_file_is_in_home_folder():
+    assert main.DATA_DIR == Path.home() / ".expense-tracker"
+    assert Path(main.FILE).parent == main.DATA_DIR
+
+
+def test_help_shows_program_name(capsys):
+    with pytest.raises(SystemExit):
+        main.build_parser().parse_args(["--help"])
+    assert "usage: expenses" in capsys.readouterr().out
